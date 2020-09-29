@@ -8,18 +8,17 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>29.0.0-beta-3</version>
+		<version>29.2.1</version>
 	<relativePath />
 	</parent>
 
 	<groupId>anotherche.plugins.imagej</groupId> 
-    <artifactId>FFmpeg_FrameReader</artifactId>
-    <version>0.3.0</version>
+    <artifactId>ImageJ_JavaCV_Installer</artifactId>
+    <version>0.1.0</version>
 	
-	<name>FFmpeg_FrameReader.jar</name>
-	<description>Opens video files supported by FFmpeg as virtual stack of frame sequence. ImageJ plugin.</description>
+	<name>ImageJ_JavaCV_Installer</name>
 	<url>http://imagej.net/PhotoBend</url>
-	<inceptionYear>2018</inceptionYear>
+	<inceptionYear>2020</inceptionYear>
 	 <organization>
         <name>ISSCM SB RAS</name>
         <url>http://www.solid.nsc.ru/</url>
@@ -50,17 +49,17 @@
 	
 	<issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/anotherche/imagej-ffmpeg-reader/issues</url>
+        <url>https://github.com/anotherche/imagej-javacv-installer/issues</url>
     </issueManagement>
     <ciManagement>
         <system>None</system>
 	</ciManagement>
 	
 	<scm>
-		<connection>scm:git:git://github.com/anotherche/imagej-ffmpeg-reader.git</connection>
-		<developerConnection>scm:git:git://github.com/anotherche/imagej-ffmpeg-reader.git</developerConnection>
+		<connection>scm:git:git://github.com/anotherche/imagej-javacv-installer.git</connection>
+		<developerConnection>scm:git:git://github.com/anotherche/imagej-javacv-installer.git</developerConnection>
 		<tag>HEAD</tag>
-		<url>https://github.com/anotherche/imagej-ffmpeg-reader</url>
+		<url>https://github.com/anotherche/imagej-javacv-installer</url>
 	</scm>
 	
 	<developers>
@@ -81,13 +80,13 @@
 	
 	<contributors>
 		<contributor>
-            <name>Anatoly Sidelnikov</name>
+            <name>Stanislav Chizhik</name>
 	</contributor>
 	</contributors>
 	
 	<properties>
-		<package-name>ffmpeg_video_import</package-name>
-		<main-class>FFmpeg_FrameReader</main-class>
+		<package-name>javacv_install</package-name>
+		<main-class>Install_JavaCV</main-class>
 		<license.licenseName>gpl</license.licenseName>
 		<license.copyrightOwners>ISSCM SB RAS</license.copyrightOwners>
 
@@ -98,189 +97,6 @@
 			<groupId>net.imagej</groupId>
 			<artifactId>ij</artifactId>
 		</dependency>
-  <dependency>
-  	<groupId>org.bytedeco</groupId>
-  	<artifactId>javacv-platform</artifactId>
-  	<exclusions>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>flycapture</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>artoolkitplus-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>flandmark</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>flycapture-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>libdc1394</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>libfreenect</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>libfreenect2</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>librealsense</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>videoinput</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>artoolkitplus</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>libdc1394-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>libfreenect-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>libfreenect2-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>librealsense-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>videoinput-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>opencv</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>opencv-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco.javacpp-presets</groupId>
-  			<artifactId>flandmark-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>openblas</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>flycapture</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>flycapture-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>artoolkitplus</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>libfreenect2</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>tesseract</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>leptonica</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>artoolkitplus-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>flandmark-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>librealsense-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>openblas-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>leptonica-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>videoinput</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>librealsense2</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>flandmark</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>librealsense</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>libfreenect</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>libdc1394-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>videoinput-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>tesseract-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>librealsense2-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>libfreenect-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>libdc1394</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>libfreenect2-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>opencv-platform</artifactId>
-  		</exclusion>
-  		<exclusion>
-  			<groupId>org.bytedeco</groupId>
-  			<artifactId>opencv</artifactId>
-  		</exclusion>
-  	</exclusions>
-  	<version>1.5.3</version>
-  </dependency>
   </dependencies>
   
   <build>
@@ -363,4 +179,6 @@
       		</plugin>
     </plugins>
 	</build>
+  <description>ImageJ plugin which helps to download and to install components of javacv package (java interface to OpenCV, FFmpeg and other) by Samuel Audet.
+Other plugins which require javacv may use it to check if necessary libraries are installed and to install missing components.</description>
 </project>
