@@ -13,7 +13,7 @@
 	</parent>
 
 	<groupId>anotherche.plugins.imagej</groupId> 
-    <artifactId>ImageJ_JavaCV_Installer</artifactId>
+    <artifactId>JavaCV_Installer</artifactId>
     <version>0.1.0</version>
 	
 	<name>ImageJ_JavaCV_Installer</name>
@@ -86,7 +86,7 @@
 	
 	<properties>
 		<package-name>javacv_install</package-name>
-		<main-class>Install_JavaCV</main-class>
+		<main-class>JavaCV_Installer</main-class>
 		<license.licenseName>gpl</license.licenseName>
 		<license.copyrightOwners>ISSCM SB RAS</license.copyrightOwners>
 

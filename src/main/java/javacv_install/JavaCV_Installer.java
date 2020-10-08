@@ -21,7 +21,7 @@ import java.util.Map;
 
 
 
-public class ImageJ_JavaCV_Installer implements PlugIn {
+public class JavaCV_Installer implements PlugIn {
 	
 	
 	//Installation parameters
@@ -287,7 +287,7 @@ public class ImageJ_JavaCV_Installer implements PlugIn {
 		}
 		
 		
-		ArrayList<String> optionalCompList = new ArrayList<>(OptionalComponents.keySet());
+		ArrayList<String> optionalCompList = new ArrayList<String>(OptionalComponents.keySet());
 		
 		String[] optionalCompNames = new String[optionalCompList.size()];
 		optionalCompNames = optionalCompList.toArray(optionalCompNames);    
