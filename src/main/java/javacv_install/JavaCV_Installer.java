@@ -47,6 +47,9 @@ public class JavaCV_Installer implements PlugIn {
 	private static final Map<String,JavaCvComponent> OptionalComponents = new LinkedHashMap<String,JavaCvComponent>();
 	private static final Map<String,JavaCvComponent> MandatoryComponents = new LinkedHashMap<String,JavaCvComponent>();
 	
+	private static String depsPath;
+	private static String natLibsPath;
+	
 	public static boolean restartRequired = false;
 	
 	static {
@@ -63,6 +66,9 @@ public class JavaCV_Installer implements PlugIn {
 		OptionalComponents.put("ffmpeg", new JavaCvComponent("ffmpeg", "4.2.2-1.5.3", EnumSet.of(HAS_PLATFORM, HAS_NATLIBS)));
 		OptionalComponents.put("opencv", new JavaCvComponent("opencv", "4.3.0-1.5.3", EnumSet.of(HAS_PLATFORM, HAS_NATLIBS)));
 		OptionalComponents.put("openblas", new JavaCvComponent("openblas", "0.3.9-1.5.3", EnumSet.of(HAS_PLATFORM, HAS_NATLIBS)));
+		
+		//Where dependencies are looked for in Fiji or ImageJ
+		GetDependenciesPath();
 	}
 	
 	
@@ -113,10 +119,6 @@ public class JavaCV_Installer implements PlugIn {
 		 */
 		public ArrayList<Dependency> GetDepsList() throws Exception {
 			ArrayList<Dependency> deps = new ArrayList<Dependency>();
-			String depsPath = GetDependenciesPath(), 
-			natLibsPath = depsPath + (IJ.isLinux() ? (IJ.is64Bit() ? "linux64" : "linux32") 
-					 : (IJ.isWindows() ? (IJ.is64Bit() ? "win64" : "win32") : "macosx"))
-					+File.separator;
 			
 			String platformSuffix = null;
 			
@@ -242,33 +244,42 @@ public class JavaCV_Installer implements PlugIn {
 	private static ArrayList<Dependency> dependencies;
 	
 	
-	private static String GetDependenciesPath(){
+	private static void GetDependenciesPath(){
 		char altSeparator = '/'== File.separatorChar?'\\':'/';
 		String appPath = IJ.getDirectory("imagej").replace(altSeparator, File.separatorChar);
-		String jarsPath = appPath+"jars"+ File.separatorChar;
+		String fijiJarsPath = appPath+"jars"+ File.separatorChar;
+		String ijJarsPath = IJ.getDirectory("plugins")+"jars"+ File.separatorChar;
 		boolean fiji = false;
 		ClassLoader cl = ClassLoader.getSystemClassLoader();
 		URL[] urls = ((java.net.URLClassLoader) cl).getURLs();
-		for (URL url: urls) 
-			if (url.getFile().replace(altSeparator, File.separatorChar).contains(jarsPath)) {
-				fiji = true;
-				break;
-			}
-		
-		if (!fiji) {
-		cl = IJ.getClassLoader();
-		urls = ((java.net.URLClassLoader) cl).getURLs();
-		for (URL url: urls) 
-			if (url.getFile().replace(altSeparator, File.separatorChar).contains(jarsPath)) {
+		for (URL url: urls) {
+			if (url.getFile().replace(altSeparator, File.separatorChar).contains(fijiJarsPath)) {
 				fiji = true;
 				break;
 			}
 		}
 		
+		if (!fiji) {
+		cl = IJ.getClassLoader();
+		urls = ((java.net.URLClassLoader) cl).getURLs();
+		for (URL url: urls) {
+			if (url.getFile().replace(altSeparator, File.separatorChar).contains(fijiJarsPath)) {
+				fiji = true;
+				break;
+			}
+		}
+		}
 		
-		if (fiji) return jarsPath;
-		else return  IJ.getDirectory("plugins");
-
+		if (fiji) {
+			depsPath = fijiJarsPath;
+			natLibsPath = depsPath + (IJ.isLinux() ? (IJ.is64Bit() ? "linux64" : "linux32") 
+						: (IJ.isWindows() ? (IJ.is64Bit() ? "win64" : "win32") : "macosx"))
+						+File.separator;
+		}
+		else {
+			depsPath = ijJarsPath;
+			natLibsPath = depsPath;
+		}
 	}
 	
 	
