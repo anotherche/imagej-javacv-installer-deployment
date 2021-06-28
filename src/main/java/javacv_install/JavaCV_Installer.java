@@ -153,7 +153,7 @@ public class JavaCV_Installer implements PlugIn {
 	static {
 
 		imagejDirectory = IJ.getDirectory("imagej");
-		updateDirectory = imagejDirectory+"Update"+File.separatorChar;
+		updateDirectory = imagejDirectory+"update"+File.separatorChar;
 		repSystem = Booter.newRepositorySystem();
 		repSession = Booter.newRepositorySystemSession( repSystem );
 		repSession.setConfigProperty( ConflictResolver.CONFIG_PROP_VERBOSE, true );
@@ -743,7 +743,7 @@ public class JavaCV_Installer implements PlugIn {
 		{
 			DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
 
-			LocalRepository localRepo = new LocalRepository( LOCAL_REPO );
+			LocalRepository localRepo = new LocalRepository( IJ.getDirectory("imagej")+LOCAL_REPO );
 			session.setLocalRepositoryManager( system.newLocalRepositoryManager( session, localRepo ) );
 
 			session.setTransferListener( new ConsoleTransferListener() );
@@ -1465,7 +1465,9 @@ public class JavaCV_Installer implements PlugIn {
 			Panel optpan = (Panel)optPanelParent.getComponent(0);
 			for (int i=0; i<compSelection.length; i++) {
 				if(macroOptions == null) {
-					compSelection[i] = ((Checkbox)optpan.getComponent(i)).getState();
+					Component cb = optpan.getComponent(i);
+					if (IJ.isLinux()) cb = ((Panel)cb).getComponent(0);
+					compSelection[i] = ((Checkbox)cb).getState();
 				} else {
 					
 					compSelection[i] = macroOptions.indexOf(optionalCompNames[i])>-1;
