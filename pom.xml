@@ -14,7 +14,7 @@
 
 	<groupId>anotherche.plugins.imagej</groupId> 
     <artifactId>JavaCV_Installer</artifactId>
-    <version>0.1.1</version>
+    <version>0.2.0</version>
 	
 	<name>ImageJ_JavaCV_Installer</name>
 	<url>http://imagej.net/PhotoBend</url>
@@ -90,6 +90,7 @@
 		<license.licenseName>gpl</license.licenseName>
 		<license.copyrightOwners>ISSCM SB RAS</license.copyrightOwners>
 
+		<scijava.app.subdirectory>plugins\JavaCV_Installer</scijava.app.subdirectory>
 	</properties>
 	
   <dependencies>
@@ -97,6 +98,41 @@
 			<groupId>net.imagej</groupId>
 			<artifactId>ij</artifactId>
 		</dependency>
+  <dependency>
+  	<groupId>org.apache.maven.resolver</groupId>
+  	<artifactId>maven-resolver-connector-basic</artifactId>
+  	<version>1.6.1</version>
+  </dependency>
+  <dependency>
+  	<groupId>org.apache.maven</groupId>
+  	<artifactId>maven-resolver-provider</artifactId>
+  	<version>3.6.3</version>
+  </dependency>
+  <dependency>
+  	<groupId>org.apache.maven.resolver</groupId>
+  	<artifactId>maven-resolver-util</artifactId>
+  	<version>1.6.1</version>
+  </dependency>
+  <dependency>
+  	<groupId>org.apache.maven.resolver</groupId>
+  	<artifactId>maven-resolver-api</artifactId>
+  	<version>1.6.1</version>
+  </dependency>
+  <dependency>
+  	<groupId>org.apache.maven.resolver</groupId>
+  	<artifactId>maven-resolver-spi</artifactId>
+  	<version>1.6.1</version>
+  </dependency>
+  <dependency>
+  	<groupId>org.apache.maven.resolver</groupId>
+  	<artifactId>maven-resolver-transport-file</artifactId>
+  	<version>1.1.0</version>
+  </dependency>
+  <dependency>
+  	<groupId>org.apache.maven.resolver</groupId>
+  	<artifactId>maven-resolver-transport-http</artifactId>
+  	<version>1.1.0</version>
+  </dependency>
   </dependencies>
   
   <build>
