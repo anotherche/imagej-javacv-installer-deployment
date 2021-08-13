@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2018-2021 Stanislav Chizhik
+ * ImageJ/Fiji plugin which helps to download and to install components of javacv package 
+ * (java interface to OpenCV, FFmpeg and other) by Samuel Audet.
+ * Other plugins which require javacv may use it to check if necessary libraries are 
+ * installed and to install missing components.
+ */
+
 package javacv_install;
 
 import ij.IJ;
@@ -123,6 +131,7 @@ public class JavaCV_Installer implements PlugIn {
 	private static String updateDirectory;
 	private static String depsPath;
 	private static String natLibsPath;
+	private static String platformSpecifier;
 	public static boolean restartRequired;
 
 	//Installation constants
@@ -154,6 +163,12 @@ public class JavaCV_Installer implements PlugIn {
 
 		imagejDirectory = IJ.getDirectory("imagej");
 		updateDirectory = imagejDirectory+"update"+File.separatorChar;
+		if(IJ.isLinux())
+			platformSpecifier = IJ.is64Bit() ? LIN_64 : LIN_32;
+		else if(IJ.isWindows())
+			platformSpecifier = IJ.is64Bit() ? WIN_64 : WIN_32;
+		else if(IJ.isMacOSX())
+			platformSpecifier = MAC;
 		repSystem = Booter.newRepositorySystem();
 		repSession = Booter.newRepositorySystemSession( repSystem );
 		repSession.setConfigProperty( ConflictResolver.CONFIG_PROP_VERBOSE, true );
@@ -881,13 +896,13 @@ public class JavaCV_Installer implements PlugIn {
 
 		DependencyFilter classpathFlter = DependencyFilterUtils.classpathFilter( JavaScopes.COMPILE );
 
-		String platformSpecifier = "";
-		if(IJ.isLinux())
-			platformSpecifier = IJ.is64Bit() ? LIN_64 : LIN_32;
-		else if(IJ.isWindows())
-			platformSpecifier = IJ.is64Bit() ? WIN_64 : WIN_32;
-		else if(IJ.isMacOSX())
-			platformSpecifier = MAC;
+//		String platformSpecifier = "";
+//		if(IJ.isLinux())
+//			platformSpecifier = IJ.is64Bit() ? LIN_64 : LIN_32;
+//		else if(IJ.isWindows())
+//			platformSpecifier = IJ.is64Bit() ? WIN_64 : WIN_32;
+//		else if(IJ.isMacOSX())
+//			platformSpecifier = MAC;
 
 		DependencyFilter filter = DependencyFilterUtils.andFilter(classpathFlter, inclusionFilter, exclusionFilter,  new ClassifierDependencyFilter(platformSpecifier), new DuplicateFilter());
 
@@ -898,11 +913,48 @@ public class JavaCV_Installer implements PlugIn {
 
 		DependencyRequest dependencyRequest = new DependencyRequest( collectRequest, filter );
 
-		//List<ArtifactResult> artifactResults =
 		if (showInfoMsg) log("Resolving dependencies...");
 		DependencyResult depRes = repSystem.resolveDependencies( repSession, dependencyRequest );
 		if (showInfoMsg && depRes!=null) log("Done");
-		return	depRes==null?null:new ArrayList<>(new HashSet<>(depRes.getArtifactResults()));
+		
+		DependencyResult depRes_gpl=null;
+		if (reqComps.contains("ffmpeg") && gvs.parseVersion(reqVersion).compareTo(gvs.parseVersion("1.5.4"))>0) {
+			if (showInfoMsg) log("Resolving optional ffmpeg-gpl dependencies...");
+			String ffmpegVersion="";
+			for ( ArtifactResult artifactResult : depRes.getArtifactResults() ){
+				if (artifactResult.getArtifact().getArtifactId().indexOf("ffmpeg-platform")!=-1) {
+					ffmpegVersion = artifactResult.getArtifact().getVersion();
+					break;
+				}
+			}
+			if (!ffmpegVersion.isEmpty()) {
+				artifact = new DefaultArtifact( "org.bytedeco:ffmpeg-platform-gpl:"+ffmpegVersion );
+				collectRequest.setRoot( new Dependency( artifact, null));
+				collectRequest.setRepositories( repList );
+				DependencyFilter gplFilter = DependencyFilterUtils.andFilter(classpathFlter, inclusionFilter, new ClassifierDependencyFilter(platformSpecifier+"-gpl"), new DuplicateFilter());
+				dependencyRequest = new DependencyRequest( collectRequest, gplFilter );
+				depRes_gpl = repSystem.resolveDependencies( repSession, dependencyRequest );
+				if (showInfoMsg){
+					if (depRes_gpl!=null) log("Optional ffmpeg-gpl dependencies are resolved");
+					else log("No optional gpl dependencies resolved");
+				}
+				
+//				for (int i=0;i<gplList.size();i++) {
+//					log(gplList.get(i).getArtifact().toString()+ " name "+gplList.get(i).getArtifact().getArtifactId()+" specifier "+gplList.get(i).getArtifact().getClassifier());
+//					
+//				}
+			} else if (showInfoMsg) log("ffmpeg version is not found");
+		}
+		List<ArtifactResult> gplList, depList;
+		if (depRes==null) return null;
+		depList = new ArrayList<>(new HashSet<>(depRes.getArtifactResults()));
+		if (depRes_gpl!=null) {
+			gplList = new ArrayList<>(new HashSet<>(depRes_gpl.getArtifactResults()));
+			depList.addAll(gplList);
+		}
+		
+		
+		return	depList;
 	}
 
 	static class JavaCVDependency {
@@ -1186,6 +1238,52 @@ public class JavaCV_Installer implements PlugIn {
 				&& versions.contains(installedVersion);
 	}
 	
+	private static boolean DoesInstalledVersionMeet(String version, boolean treatAsMinVer) {
+		if (isInstalledVersionValid()) {
+			GenericVersionScheme gvs = new GenericVersionScheme();
+			try { 
+				if (treatAsMinVer) return gvs.parseVersion(version).compareTo(gvs.parseVersion(installedVersion))<=0;
+				else return gvs.parseVersion(version).compareTo(gvs.parseVersion(installedVersion))==0;
+			} catch (InvalidVersionSpecificationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
+	private static boolean IsFileConflicting (Path path, String reqVersion) {
+		String name = path.getFileName().toString();
+		String platformName = platformSpecifier.substring(0, platformSpecifier.indexOf("-"));
+		GenericVersionScheme gvs = new GenericVersionScheme();
+		int platformIndex = name.indexOf(platformName);
+		if (platformIndex>0) {
+			String check64bit = name.substring(platformIndex + platformName.length() + 4);
+			boolean is64bit = check64bit.startsWith("_64");
+			if ((is64bit && !IJ.is64Bit()) || (!is64bit && IJ.is64Bit())) {
+				return true;
+			}
+		}
+		String ver = name.replaceAll(".jar","").replaceAll("[a-zA-Z]","");
+		while(ver.startsWith("-") ) ver = ver.substring(1);
+		while(ver.endsWith("-") ) ver = ver.substring(0, ver.length()-1);
+		int Dash = ver.indexOf("--");
+		if (Dash>-1) ver = ver.substring(0,Dash);
+		Dash = ver.indexOf("-");
+		if (Dash>-1) ver = ver.substring(Dash+1);
+		Version chkVer;
+		try {
+			chkVer = gvs.parseVersion(ver);
+			if((!isInstalledVersionValid() || chkVer.compareTo(gvs.parseVersion(installedVersion))!=0) && chkVer.compareTo(gvs.parseVersion(reqVersion))!=0)
+				return true;
+		} catch (InvalidVersionSpecificationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 	
 	/**
 	 * Returns true if video import plugin can run.
@@ -1243,19 +1341,7 @@ public class JavaCV_Installer implements PlugIn {
 		
 	}
 	
-	private static boolean DoesInstalledVersionMeet(String version, boolean treatAsMinVer) {
-		if (isInstalledVersionValid()) {
-			GenericVersionScheme gvs = new GenericVersionScheme();
-			try { 
-				if (treatAsMinVer) return gvs.parseVersion(version).compareTo(gvs.parseVersion(installedVersion))<=0;
-				else return gvs.parseVersion(version).compareTo(gvs.parseVersion(installedVersion))==0;
-			} catch (InvalidVersionSpecificationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return false;
-	}
+	
 	
 	/**
 	 * Returns true if video import plugin can run.
@@ -1607,6 +1693,8 @@ public class JavaCV_Installer implements PlugIn {
 		////Try to cleanup conflicts and previous incorrect installations 
 		try {
 			boolean conflictsFound = false;
+			//String platformName = platformSpecifier.substring(0, platformSpecifier.indexOf("-"));
+			//GenericVersionScheme gvs = new GenericVersionScheme();
 			if (showInfoMsg) {
 				log(" ");
 				log("Searching possible conflicts...");
@@ -1620,18 +1708,15 @@ public class JavaCV_Installer implements PlugIn {
 			for(String checkDir : checkDirs){
 				if(new File(checkDir).exists())
 					for(String checkComp : allComps){
-						DirectoryStream<Path> dirStream = Files.newDirectoryStream(
-					            Paths.get(checkDir), checkComp+"*.jar");
+						DirectoryStream<Path> dirStream = Files.newDirectoryStream(Paths.get(checkDir), checkComp+"*.jar");
 						for (Path path : dirStream){
-							//log("check "+path);
-							String name = path.getFileName().toString();
-							if((!isInstalledVersionValid() || name.indexOf(installedVersion)==-1) && name.indexOf(reqVersion)==-1){
-								conflictsFound = true;
-								new JavaCVDependency(path.getFileName().toString(), path.getParent().toString()+File.separator, null).Remove();
-								log("Conflicting file will be removed: "+path);
+							if (IsFileConflicting(path, reqVersion)) {
+									conflictsFound = true;
+									new JavaCVDependency(path.getFileName().toString(), path.getParent().toString()+File.separator, null).Remove();
+									log("Conflicting file will be removed: "+path);
 							}
+													
 						}
-	
 					}
 			}
 			
