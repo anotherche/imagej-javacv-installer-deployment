@@ -13,10 +13,10 @@
 	</parent>
 
 	<groupId>anotherche.plugins.imagej</groupId> 
-    <artifactId>JavaCV_Installer</artifactId>
-    <version>0.2.2</version>
+    <artifactId>Deploy_JavaCV_Installer</artifactId>
+    <version>0.1.0</version>
 	
-	<name>ImageJ_JavaCV_Installer</name>
+	<name>ImageJ_JavaCV_Installer_Deployment</name>
 	<url>http://imagej.net/PhotoBend</url>
 	<inceptionYear>2020</inceptionYear>
 	 <organization>
@@ -49,17 +49,17 @@
 	
 	<issueManagement>
         <system>GitHub Issues</system>
-        <url>https://github.com/anotherche/imagej-javacv-installer/issues</url>
+        <url>https://github.com/anotherche/imagej-javacv-installer-deployment/issues</url>
     </issueManagement>
     <ciManagement>
         <system>None</system>
 	</ciManagement>
 	
 	<scm>
-		<connection>scm:git:git://github.com/anotherche/imagej-javacv-installer.git</connection>
-		<developerConnection>scm:git:git://github.com/anotherche/imagej-javacv-installer.git</developerConnection>
+		<connection>scm:git:git://github.com/anotherche/imagej-javacv-installer-deployment.git</connection>
+		<developerConnection>scm:git:git://github.com/anotherche/imagej-javacv-installer-deployment.git</developerConnection>
 		<tag>HEAD</tag>
-		<url>https://github.com/anotherche/imagej-javacv-installer</url>
+		<url>https://github.com/anotherche/imagej-javacv-installer-deployment</url>
 	</scm>
 	
 	<developers>
@@ -85,8 +85,8 @@
 	</contributors>
 	
 	<properties>
-		<package-name>javacv_install</package-name>
-		<main-class>JavaCV_Installer</main-class>
+		<package-name>javacv_install_deployment</package-name>
+		<main-class>Deploy_JavaCV_Installer</main-class>
 		<license.licenseName>gpl</license.licenseName>
 		<license.copyrightOwners>ISSCM SB RAS</license.copyrightOwners>
 
@@ -98,41 +98,6 @@
 			<groupId>net.imagej</groupId>
 			<artifactId>ij</artifactId>
 		</dependency>
-  <dependency>
-  	<groupId>org.apache.maven.resolver</groupId>
-  	<artifactId>maven-resolver-connector-basic</artifactId>
-  	<version>1.6.1</version>
-  </dependency>
-  <dependency>
-  	<groupId>org.apache.maven</groupId>
-  	<artifactId>maven-resolver-provider</artifactId>
-  	<version>3.6.3</version>
-  </dependency>
-  <dependency>
-  	<groupId>org.apache.maven.resolver</groupId>
-  	<artifactId>maven-resolver-util</artifactId>
-  	<version>1.6.1</version>
-  </dependency>
-  <dependency>
-  	<groupId>org.apache.maven.resolver</groupId>
-  	<artifactId>maven-resolver-api</artifactId>
-  	<version>1.6.1</version>
-  </dependency>
-  <dependency>
-  	<groupId>org.apache.maven.resolver</groupId>
-  	<artifactId>maven-resolver-spi</artifactId>
-  	<version>1.6.1</version>
-  </dependency>
-  <dependency>
-  	<groupId>org.apache.maven.resolver</groupId>
-  	<artifactId>maven-resolver-transport-file</artifactId>
-  	<version>1.1.0</version>
-  </dependency>
-  <dependency>
-  	<groupId>org.apache.maven.resolver</groupId>
-  	<artifactId>maven-resolver-transport-http</artifactId>
-  	<version>1.1.0</version>
-  </dependency>
   </dependencies>
   
   <build>
@@ -215,6 +180,6 @@
       		</plugin>
     </plugins>
 	</build>
-  <description>ImageJ plugin which helps to download and to install components of javacv package (java interface to OpenCV, FFmpeg and other) by Samuel Audet.
+  <description>ImageJ plugin which helps to deploy (compile, build jar) JavaCV_Installer, another plugin which helps to  download and to install components of javacv package (java interface to OpenCV, FFmpeg and other) by Samuel Audet.
 Other plugins which require javacv may use it to check if necessary libraries are installed and to install missing components.</description>
 </project>
