@@ -13,10 +13,10 @@
 	</parent>
 
 	<groupId>anotherche.plugins.imagej</groupId> 
-    <artifactId>Deploy_JavaCV_Installer</artifactId>
+    <artifactId>Deploy_Video_Plugins</artifactId>
     <version>0.1.0</version>
 	
-	<name>ImageJ_JavaCV_Installer_Deployment</name>
+	<name>ImageJ_Video_Plugins_Deployment</name>
 	<url>http://imagej.net/PhotoBend</url>
 	<inceptionYear>2020</inceptionYear>
 	 <organization>
@@ -47,20 +47,10 @@
         </mailingList>
 	</mailingLists>
 	
-	<issueManagement>
-        <system>GitHub Issues</system>
-        <url>https://github.com/anotherche/imagej-javacv-installer-deployment/issues</url>
-    </issueManagement>
     <ciManagement>
         <system>None</system>
 	</ciManagement>
 	
-	<scm>
-		<connection>scm:git:git://github.com/anotherche/imagej-javacv-installer-deployment.git</connection>
-		<developerConnection>scm:git:git://github.com/anotherche/imagej-javacv-installer-deployment.git</developerConnection>
-		<tag>HEAD</tag>
-		<url>https://github.com/anotherche/imagej-javacv-installer-deployment</url>
-	</scm>
 	
 	<developers>
         <developer>
@@ -85,12 +75,12 @@
 	</contributors>
 	
 	<properties>
-		<package-name>javacv_install_deployment</package-name>
-		<main-class>Deploy_JavaCV_Installer</main-class>
+		<package-name>video_plugins_deployment</package-name>
+		<main-class>Deploy_Video_Plugins</main-class>
 		<license.licenseName>gpl</license.licenseName>
 		<license.copyrightOwners>ISSCM SB RAS</license.copyrightOwners>
 
-		<scijava.app.subdirectory>plugins\JavaCV_Installer</scijava.app.subdirectory>
+		<scijava.app.subdirectory>plugins\FFmpeg_Video</scijava.app.subdirectory>
 	</properties>
 	
   <dependencies>
@@ -180,6 +170,15 @@
       		</plugin>
     </plugins>
 	</build>
-  <description>ImageJ plugin which helps to deploy (compile, build jar) JavaCV_Installer, another plugin which helps to  download and to install components of javacv package (java interface to OpenCV, FFmpeg and other) by Samuel Audet.
-Other plugins which require javacv may use it to check if necessary libraries are installed and to install missing components.</description>
+  <description>Deploy ImageJ plugins for reading and writing video files using FFmpeg.</description>
+  <scm>
+  	<url>https://github.com/anotherche/imagej-video-plugins-deployment</url>
+  	<connection>scm:git:git://github.com/anotherche/imagej-video-plugins-deployment.git</connection>
+  	<developerConnection>scm:git:git://github.com/anotherche/imagej-video-plugins-deployment.git</developerConnection>
+  	<tag>HEAD</tag>
+  </scm>
+  <issueManagement>
+  	<system>GitHub Issues</system>
+  	<url>https://github.com/anotherche/imagej-javacv-installer-deployment/issues</url>
+  </issueManagement>
 </project>
